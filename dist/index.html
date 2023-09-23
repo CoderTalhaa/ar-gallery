@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/AR img.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>AR-Hub</title>
+    <script type="module" crossorigin src="/assets/index-a0f48949.js"></script>
+    <link rel="stylesheet" href="/assets/index-022fba65.css">
+  </head>
+  <body>
+    <img src="./AR img.jpg" alt="Ar" class="img" />
+
+    <div class="container">
+      <model-viewer
+        class="model"
+        src="./gtr.glb"
+        ios-src="./gtr.usdz" xr-environment
+        shadow-intensity="1"
+        ar
+        camera-controls
+        touch-action="pan-y"
+        alt="A 3D model carousel"
+        
+       
+      >
+        <button id="viewButton" class="ar-button"> <img class="close-img" src="./close.png" alt=""> View in AR</button>
+        <button id="support-button" slot="ar-button" class="ar-button">
+          <img class="open-img" src="./open.pic.png" alt=""> View in AR
+        </button>
+        <div class="box-container" id="boxContainer1">
+          <div id="ar-message">
+            <span>Open this site on a Phone supporting AR</span>
+            <div class="image">
+              <div class="qr-code">
+                <img src="./ar-hub.png" alt="qr-code" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </model-viewer>
+
+      <model-viewer
+        class="model"
+        src="./computer.glb"
+        ios-src="./computer.usdz" xr-environment
+        shadow-intensity="1"
+        ar
+        camera-controls
+        touch-action="pan-y"
+        alt="A 3D model carousel"
+      >
+      <button id="viewButton" class="ar-button"> <img class="close-img" src="./close.png" alt=""> View in AR</button>
+      <button id="support-button" slot="ar-button" class="ar-button">
+        <img class="open-img" src="./open.pic.png" alt=""> View in AR
+      </button>
+        <div class="box-container" id="boxContainer2">
+          <div id="ar-message">
+            <span>Open this site on a Phone supporting AR</span>
+            <div class="image">
+              <div class="qr-code">
+                <img src="./ar-hub.png" alt="qr-code" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </model-viewer>
+      <model-viewer
+        class="model"
+        src="./bombRocket.glb"
+        ios-src="./bombRocket.usdz" xr-environment
+        shadow-intensity="1"
+        ar
+        camera-controls
+        touch-action="pan-y"
+        alt="A 3D model carousel"
+      >
+      <button id="viewButton" class="ar-button"> <img class="close-img" src="./close.png" alt=""> View in AR</button>
+      <button id="support-button" slot="ar-button" class="ar-button">
+        <img class="open-img" src="./open.pic.png" alt=""> View in AR
+      </button>
+        <div class="box-container" id="boxContainer3">
+          <div id="ar-message">
+            <span>Open this site on a Phone supporting AR</span>
+            <div class="image">
+              <div class="qr-code">
+                <img src="./ar-hub.png" alt="qr-code" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </model-viewer>
+
+      <model-viewer
+        class="model"
+        id="modelViewer"
+        alt="3D Model Viewer"
+        shadow-intensity="1"
+        ar
+        camera-controls
+        touch-action="pan-y"
+      >
+        <input type="file" accept=".glb, .gltf" id="modelInput" />
+        <button id="viewButton" class="ar-button"> <img class="close-img" src="./close.png" alt=""> View in AR</button>
+        <button id="support-button" slot="ar-button" class="ar-button">
+          <img class="open-img" src="./open.pic.png" alt=""> View in AR
+        </button>
+        <div class="box-container" id="boxContainer3">
+          <div id="ar-message">
+            <span>Open this site on a Phone supporting AR</span>
+            <div class="image">
+              <div class="qr-code">
+                <img src="./ar-hub.png" alt="qr-code" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </model-viewer>
+    </div>
+
+    <script>
+           const modelInput = document.getElementById("modelInput");
+    const modelViewer = document.getElementById("modelViewer");
+
+    // Check if a previously selected model is saved in local storage
+    const savedModelSrc = localStorage.getItem("modelSrc");
+    if (savedModelSrc) {
+        modelViewer.src = savedModelSrc;
+    }
+
+    modelInput.addEventListener("change", (event) => {
+        const selectedFile = event.target.files[0];
+
+        if (selectedFile) {
+            const objectURL = URL.createObjectURL(selectedFile);
+            modelViewer.src = objectURL;
+
+            // Save the model's src to local storage
+            localStorage.setItem("modelSrc", objectURL);
+        } else {
+            console.error("No file selected.");
+        }
+    });
+
+    modelViewer.addEventListener("ar-status", (event) => {
+        if (event.detail.status === "failed") {
+            console.error("AR activation failed:", event.detail.error);
+        }
+    });
+
+    modelViewer.addEventListener("ar-session-in-progress", () => {
+        console.log("AR session in progress.");
+    });
+
+    modelViewer.addEventListener("ar-session-ended", () => {
+        console.log("AR session ended.");
+    });
+
+    modelViewer.addEventListener("ar-error", (event) => {
+        console.error("AR error:", event.detail.error);
+    });
+      // Function to handle clicks on the document
+      const handleDocumentClick = (event) => {
+        // Loop through each box-container
+        const boxContainers = document.querySelectorAll(".box-container");
+        const viewButtons = document.querySelectorAll('[id^="viewButton"]');
+
+        for (let i = 0; i < boxContainers.length; i++) {
+          if (
+            !boxContainers[i].contains(event.target) &&
+            event.target !== viewButtons[i]
+          ) {
+            // Clicked outside the box-container and not on the corresponding viewButton
+            boxContainers[i].style.display = "none";
+          }
+        }
+      };
+
+      // Add click event listeners to each viewButton
+      const viewButtons = document.querySelectorAll('[id^="viewButton"]');
+      const boxContainers = document.querySelectorAll(".box-container");
+
+      viewButtons.forEach((viewButton, index) => {
+        viewButton.addEventListener("click", () => {
+          // Toggle the visibility of the corresponding box-container
+          boxContainers[index].style.display =
+            boxContainers[index].style.display === "block" ? "none" : "block";
+        });
+      });
+
+      // Add a click event listener to the document
+      document.addEventListener("click", handleDocumentClick);
+    </script>
+
+    <canvas id="gradient"></canvas>
+    
+
+    <canvas id="webgl"></canvas>
+    
+    <!-- <script type="module">
+      import { App } from './ar.js';
+
+      document.addEventListener("DOMContentLoaded", function(){
+          const app = new App();
+          window.app = app;
+      });
+  </script> -->
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"
+    ></script>
+  </body>
+</html>
